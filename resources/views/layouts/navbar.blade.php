@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary nav-cont">
+<nav class="navbar navbar-expand-lg bg-body-tertiary nav-cont sticky-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="/">ShareSphere</a>
     <button class="navbar-toggler navbar-icon" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,11 @@
           <ul class="dropdown-menu text">
             @auth
               <li><a class="dropdown-item" href="#" id="logout-button">Logout</a></li>
+              <li><a class="dropdown-item" href="/add-product" id="add-button">Add Product</a></li>
+              <li><a class="dropdown-item" href="/manage-product" id="manage-button">Manage Product</a></li>
+              <li><a class="dropdown-item" href="#" id="transaction-button">Transaction</a></li>
+              <li><a class="dropdown-item" href="#" id="return-button">Return</a></li>
+
 
               <form id="logout-form" action="{{route('logout')}}" method="POST" style="display: none;">
                   @csrf

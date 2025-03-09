@@ -46,7 +46,12 @@ class AuthController extends Controller
             "name"=>"required",
             "email"=>"required|unique:users,email",
             "password"=>"required",
-        ]);
+        ],
+        [
+            "email.required" => "Email is required",
+            "email.unique" => "Email has been used"
+        ]
+        );     
 
         $user = new User();
         $user->name = $request->name;

@@ -5,7 +5,7 @@
 
 @if (session()->has("error"))
     <div class="alert alert-success">
-        {{session()->get( "error")}}
+        {{session()->get( "error")}}  
     </div>
 @endif
 
@@ -24,7 +24,7 @@
         <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
         <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
         @if ($errors->has("email"))
-            <div id="nameHelp" class="form-text text-danger">Email required</div>
+            <div id="emailHelp" class="form-text text-danger">{{$errors->first("email")}}</div>
         @endif
     </div>
 

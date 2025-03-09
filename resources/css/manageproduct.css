@@ -1,0 +1,44 @@
+.list-group-item {
+    width: 100%;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+
+.item-image {
+    width: 55px;
+    height: 55px;
+    object-fit: cover;
+    flex-shrink: 0; /* Prevents image from shrinking */
+}
+
+.item-info {
+    flex-grow: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: row;
+}
+
+.pname, .price, .stock {
+    width: 100%;
+    padding-left: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pname {
+    font-weight: 550;
+}
+
+.item-actions {
+    flex-shrink: 0; /* Prevents buttons from shrinking */
+    display: flex;
+    gap: 10px;
+}
+
+.btn-manage{
+    display: contents;
+}

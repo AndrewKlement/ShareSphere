@@ -1,0 +1,36 @@
+.items-cont{
+    padding: 20px;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.card{
+    width: 188px;
+    height: 350px;
+}
+
+.item-image{
+    display: flex;
+    height: 180px;
+    object-fit: cover; 
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    height: 168px;
+}
+
+.title {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+}
+
+.desc{
+    margin-top: auto;
+}

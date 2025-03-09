@@ -1,0 +1,29 @@
+@extends("layouts.app")
+@vite(['resources/js/manageproduct.js'])
+@section("title", "Manage Product")
+@section("content")
+
+<ul class="list-group items-cont">
+    @foreach ($items as $item)
+        <li class="list-group-item">
+            <img src="/storage/{{$item->thumbnail->path}}" class="item-image">
+            
+            <div class="item-info">
+                <div class="pname">{{$item->name}}</div>
+                <div class="price">Rp {{$item->price}} /day</div>
+                <div class="stock">{{$item->stock}} pcs</div>
+            </div>
+
+            <div class="item-actions">
+                <button type="button" class="btn btn-primary">Edit</button>
+                <form action="{{route("manageProduct.delete", $item->id)}}" method="POST" class="btn-manage">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </li>
+    @endforeach
+</ul>
+
+@endsection

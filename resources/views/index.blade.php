@@ -1,6 +1,27 @@
 @extends("layouts.app")
-@vite(['resources/js/auth/login.js'])
+@vite(['resources/js/index.js'])
 @section("title", "Login")
 @section("content")
+
+@if (session()->has("success"))
+    <div class="alert alert-success">
+        {{session()->get("success")}}
+    </div>
+@endif
+
+<div class="items-cont">
+@foreach ($items as $item)
+    <div class="card">
+        <img src="/storage/{{$item->thumbnail->path}}" class="card-img-top item-image">
+        <div class="card-body">
+            <h5 class="card-title title">{{$item->name}}</h5>
+            <div class="desc">
+                <h6 class="card-subtitle mb-2 text-body-secondary">Rp {{$item->price}}</h6>
+                <p class="card-text">{{$item->user->name}}</p>
+            </div>
+        </div>
+    </div>
+@endforeach
+</div>
 
 @endsection
