@@ -1,6 +1,6 @@
 @extends("layouts.app")
 @vite(['resources/js/index.js'])
-@section("title", "Login")
+@section("title", "Home")
 @section("content")
 
 @if (session()->has("success"))
@@ -12,7 +12,7 @@
 <div class="items-cont">
 @foreach ($items as $item)
     <div class="card">
-        <img src="/storage/{{$item->thumbnail->path}}" class="card-img-top item-image">
+        <img src="/storage/{{$item->item_images->first()->path}}" class="card-img-top item-image">
         <div class="card-body">
             <h5 class="card-title title">{{$item->name}}</h5>
             <div class="desc">

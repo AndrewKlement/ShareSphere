@@ -7,6 +7,7 @@ use App\Models\Item;
 use App\Models\ItemImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\ShippingDetail;
 
 
 class IndexController extends Controller{
@@ -14,9 +15,30 @@ class IndexController extends Controller{
 
     public function index()
     {
-        $items = Item::with('user')->with('thumbnail')->get();
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Please log in first.');
+        }
+    
+        $userId = Auth::id();
 
-        return view("index", compact('items'));
+        $items = Item::with(['user', 'item_images' => function ($query) {
+        $query->where('img_position', 1)
+            ->orWhere(function ($q) {
+                $q->whereNotIn('id', function ($subquery) {
+                    $subquery->select('id')->from('item_images')->where('img_position', 1);
+                });
+            })
+            ->orderBy('img_position', 'asc')
+            ->orderBy('created_at', 'asc')
+            ->limit(1);
+        }])->get();
+
+        $shippingdetail = ShippingDetail::where('user_id', $userId)->first() ?? null;
+
+        if ($shippingdetail) {
+            return view("index", compact('items'));
+        }
+        return view("shippingdetail", compact('shippingdetail'));
     }
 
 }

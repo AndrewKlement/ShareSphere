@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('categories', function (Blueprint $table) {
@@ -32,6 +29,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('item_id')->index()->constrained();
             $table->string('path');
+            $table->integer('img_position');
             $table->timestamps();
         });
     }

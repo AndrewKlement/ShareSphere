@@ -12,7 +12,9 @@ export default defineConfig({
                 'resources/js/auth/register.js',
                 'resources/js/index.js',
                 'resources/js/addproduct.js',
-                'resources/js/manageproduct.js'
+                'resources/js/manageproduct.js',
+                'resources/js/editproduct.js',
+                'resources/js/shippingdetail.js'
             ],
             refresh: true,
         }),

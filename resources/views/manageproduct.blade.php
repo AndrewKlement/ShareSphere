@@ -6,7 +6,7 @@
 <ul class="list-group items-cont">
     @foreach ($items as $item)
         <li class="list-group-item">
-            <img src="/storage/{{$item->thumbnail->path}}" class="item-image">
+            <img src="/storage/{{$item->item_images->first()->path}}" class="item-image">
             
             <div class="item-info">
                 <div class="pname">{{$item->name}}</div>
@@ -15,7 +15,8 @@
             </div>
 
             <div class="item-actions">
-                <button type="button" class="btn btn-primary">Edit</button>
+                <a class="btn btn-primary" href="{{route("editProduct", $item->id)}}" >Edit</a>
+                
                 <form action="{{route("manageProduct.delete", $item->id)}}" method="POST" class="btn-manage">
                     @csrf
                     @method('DELETE')

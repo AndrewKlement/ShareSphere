@@ -27,9 +27,4 @@ class Item extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function thumbnail(): HasOne
-    {
-        return $this->hasOne(ItemImage::class)->oldest();
-    }
 }

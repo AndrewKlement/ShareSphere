@@ -11,7 +11,8 @@ class ItemImage extends Model
 {
     protected $fillable = [
         'item_id',
-        'path'
+        'path',
+        'img_position'
     ];
 
     public function item(): BelongsTo
