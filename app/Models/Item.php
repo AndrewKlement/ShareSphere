@@ -27,4 +27,9 @@ class Item extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function shippingDetail()
+    {
+        return $this->hasOneThrough(ShippingDetail::class, User::class, 'id', 'user_id', 'user_id', 'id');
+    }
 }

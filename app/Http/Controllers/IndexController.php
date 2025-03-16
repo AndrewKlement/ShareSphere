@@ -21,21 +21,22 @@ class IndexController extends Controller{
     
         $userId = Auth::id();
 
-        $items = Item::with(['user', 'item_images' => function ($query) {
-        $query->where('img_position', 1)
-            ->orWhere(function ($q) {
-                $q->whereNotIn('id', function ($subquery) {
-                    $subquery->select('id')->from('item_images')->where('img_position', 1);
-                });
-            })
-            ->orderBy('img_position', 'asc')
-            ->orderBy('created_at', 'asc')
-            ->limit(1);
-        }])->get();
-
+        
         $shippingdetail = ShippingDetail::where('user_id', $userId)->first() ?? null;
-
+        
         if ($shippingdetail) {
+            $items = Item::with(['user', 'item_images' => function ($query) {
+            $query->where('img_position', 1)
+                ->orWhere(function ($q) {
+                    $q->whereNotIn('id', function ($subquery) {
+                        $subquery->select('id')->from('item_images')->where('img_position', 1);
+                    });
+                })
+                ->orderBy('img_position', 'asc')
+                ->orderBy('created_at', 'asc')
+                ->limit(1);
+            }])->with('shippingDetail')->get();
+
             return view("index", compact('items'));
         }
         return view("shippingdetail", compact('shippingdetail'));
