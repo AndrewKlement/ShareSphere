@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('price');
             $table->integer('stock');
             $table->foreignId('user_id')->index()->constrained();
+            $table->softDeletes();
             $table->timestamps();
         });
 

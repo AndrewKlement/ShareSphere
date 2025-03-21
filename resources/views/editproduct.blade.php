@@ -3,11 +3,6 @@
 @section("title", "Edit Product")
 @section("content")
 
-@if (session()->has("error"))
-<div class="alert alert-success">
-    {{session()->get( "error")}}  
-</div>
-@endif
 <form class="form-cont form" method="POST" action="{{ route('editProduct.patch', $item->id) }}" enctype="multipart/form-data">
     @csrf
     @method('PATCH')

@@ -3,12 +3,6 @@
 @section("title", "Shipping Detail")
 @section("content")
 
-@if (session()->has("error"))
-    <div class="alert alert-success">
-        {{session()->get( "error")}}  
-    </div>
-@endif
-
 @if ($shippingdetail)
     <form class="form-cont form" method="POST" action="{{route('shippingDetail.post')}}" enctype="multipart/form-data">
         @csrf

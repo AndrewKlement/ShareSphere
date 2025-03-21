@@ -20,7 +20,6 @@ class IndexController extends Controller{
         }
     
         $userId = Auth::id();
-
         
         $shippingdetail = ShippingDetail::where('user_id', $userId)->first() ?? null;
         
@@ -35,7 +34,7 @@ class IndexController extends Controller{
                 ->orderBy('img_position', 'asc')
                 ->orderBy('created_at', 'asc')
                 ->limit(1);
-            }])->with('shippingDetail')->get();
+            }])->with('shippingDetail')->where('stock', '!=', 0)->get();
 
             return view("index", compact('items'));
         }

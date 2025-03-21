@@ -13,7 +13,7 @@
           </button>
         </form>
         <li class="nav-item text">
-          <a class="nav-link" href="#">Cart</a>
+          <a class="nav-link" href="/cart">Cart</a>
         </li>
         <li class="nav-item dropdown text">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

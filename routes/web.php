@@ -4,24 +4,41 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\ShippingDetailController;
 
+// login
+Route::get('/login', [AuthController::class, "login"])->name("login");
+Route::post('/login', [AuthController::class, "loginPost"])->name("login.post");
 
-Route::middleware("auth")->group(function (){
+//register
+Route::get('/register', [AuthController::class, "register"])->name("register");
+Route::post('/register', [AuthController::class, "registerPost"])->name("register.post");
+
+Route::middleware("auth")->group(function (){  
     //home
     Route::get('/', [IndexController::class, "index"])->name("home");
     
     //logout
     Route::post('/logout', [AuthController::class, "logout"])->name("logout");
-
+    
     //cart
-    Route::view('/cart', 'cart')->name("cart");
+    Route::get('/cart', [CartController::class, "viewCart"])->name("cart");
+    Route::post('/cart/purchase', [CartController::class, 'processPurchase'])->name('cart.processPurchase');
+    Route::post('/cart/payment', [CartController::class, 'processPayment'])->name('cart.processPayment');
+    Route::delete('/cart/delete/{id}', [CartController::class, 'delete'])->name('cart.delete');
+    Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 
     //shipping-detail
     Route::get('/shipping-detail', [ShippingDetailController::class, "shippingDetail"])->name("shippingDetail");
     Route::post('/shipping-detail', [ShippingDetailController::class, "shippingDetailPost"])->name("shippingDetail.post");
 
+    //view-product
+    Route::get('/view/{id}', [ItemController::class, "viewProduct"])->name("viewProduct");
+    Route::post('/product/cart', [CartController::class, 'viewProductPostCart'])->name('viewProduct.cart');
+    Route::post('/product/buy', [TransactionController::class, 'viewProductPostBuy'])->name('viewProduct.buy');
 
     //add-product
     Route::get('/add-product', [ItemController::class, "addProduct"])->name("addProduct");
@@ -42,13 +59,5 @@ Route::middleware("auth")->group(function (){
     Route::view('/transaction', 'transaction')->name("transaction");
 });
 
-// login
-Route::get('/login', [AuthController::class, "login"])->name("login");
-Route::post('/login', [AuthController::class, "loginPost"])->name("login.post");
-
-
-//register
-Route::get('/register', [AuthController::class, "register"])->name("register");
-Route::post('/register', [AuthController::class, "registerPost"])->name("register.post");
 
 

@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\DB;
 
 class ItemController extends Controller
 {
+    //view product
+    public function viewProduct($itemId)
+    {
+        $item = Item::with(['user', 'item_images', 'shippingDetail'])->where('id', $itemId)->withTrashed()->first();
+        return view("productview", compact('item'));
+    }
+
     //add product
     public function addProduct()
     {
@@ -25,7 +32,7 @@ class ItemController extends Controller
     {
         
         if (Auth::check()) {
-            $userId = Auth::id(); // Get authenticated user ID
+            $userId = Auth::id();
         } else {
             return redirect()->route('login')->with('error', 'Please log in first.');
         }
@@ -121,31 +128,13 @@ class ItemController extends Controller
 
         $item = Item::with('item_images')->findOrFail($itemId);
 
-        if($item->user_id == $userId){
-            try {
-                DB::beginTransaction();
-            
-                if (!$item) {
-                    return redirect()->back()->with('error', 'Item not found.');
-                }
-                
-                foreach($item->item_images as $image){
-                    Storage::disk('public')->delete($image->path);
-                };
-    
-    
-                $item->item_images()->delete();
-        
-                $item->delete();
-        
-                DB::commit();
-                return redirect()->back()->with('success', 'Item deleted successfully.');
-            } catch (Exception $e) {
-                DB::rollBack();
-                return redirect()->back()->with('error', 'Error deleting item: ' . $e->getMessage());
-            }
+        if (!$item) {
+            return redirect()->back()->with('error', 'Item not found.');
         }
-        return redirect()->back()->with('error', 'Item not found');
+
+        $item->delete();
+
+        return redirect()->back()->with('success', 'Item deleted successfully.');
     }
 
     public function editProduct($itemId){

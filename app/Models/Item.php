@@ -5,17 +5,21 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 
 class Item extends Model
 {
+    use SoftDeletes;
+    
     protected $fillable = [
         'name',
         'category_id',
         'description',
         'price',
         'stock',
-        'user_id'
+        'user_id',
     ];
 
     public function item_images(): HasMany

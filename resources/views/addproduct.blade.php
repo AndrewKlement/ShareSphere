@@ -3,11 +3,6 @@
 @section("title", "Add Product")
 @section("content")
 
-@if (session()->has("error"))
-    <div class="alert alert-success">
-        {{session()->get( "error")}}  
-    </div>
-@endif
 
 <form class="form-cont form" method="POST" action="{{ route('addProduct.post') }}" enctype="multipart/form-data">
     @csrf
