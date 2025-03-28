@@ -1,19 +1,21 @@
-.cont{
+.cont {
     display: flex;
-    width: 100%;
+    flex-wrap: wrap;
 }
 
 .list-group{
-    width: 100%;
+    width: 75%;
+    flex-grow: 1;
+    min-width: 0;
 }
 
-.details{
+.details {
     display: flex;
     flex-direction: column;
-    height: 200px;
-    width: 380px;
+    min-width: 300px;
+    max-width: 100%;
+    width: auto;
     padding: 15px;
-    justify-content: start;
 }
 
 .list-group-item {
@@ -68,17 +70,17 @@
     font-weight: 500;
 }
 
-.quantity-btn{
+.quantity-btn, .duration-btn{
     border: 0px;
     color: black;
 }
 
-.quantity-btn:hover{
+.quantity-btn:hover, .duration-btn:hover{
     background-color: transparent;
     color: black;
 }
 
-.quantity-input {
+.quantity-input, .duration-input {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -89,4 +91,11 @@
 
 .delete-form {
     margin-bottom: 0px;
+}
+
+.inpt-cont{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }

@@ -11,7 +11,7 @@
         <div class="card-body">
             <h5 class="card-title title">{{$item->name}}</h5>
             <div class="desc">
-                <h6 class="card-subtitle mb-1 text-body-secondary">Rp{{$item->price}}</h6>
+                <h6 class="card-subtitle mb-1 text-body-secondary">Rp{{$item->price}} /day</h6>
                 <p class="card-text item-text">{{$item->user->name}}</p>
                 <p class="card-text item-text">{{$item->shippingDetail->province}} jakarta</p>
             </div>

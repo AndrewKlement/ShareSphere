@@ -25,7 +25,8 @@
               <li><a class="dropdown-item" href="/shipping-detail" id="transaction-button">Shipping Detail</a></li>
               <li><a class="dropdown-item" href="/add-product" id="add-button">Add Product</a></li>
               <li><a class="dropdown-item" href="/manage-product" id="manage-button">Manage Product</a></li>
-              <li><a class="dropdown-item" href="#" id="transaction-button">Transaction</a></li>
+              <li><a class="dropdown-item" href="/transaction" id="transaction-button">Transaction</a></li>
+              <li><a class="dropdown-item" href="/return-due" id="return-button">Return Due</a></li>
               <li><a class="dropdown-item" href="#" id="return-button">Return</a></li>
 
 

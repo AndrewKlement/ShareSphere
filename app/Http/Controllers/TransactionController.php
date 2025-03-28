@@ -11,10 +11,28 @@ use Illuminate\Support\Facades\Auth;
 
 class TransactionController extends Controller{
 
-    public function viewProductPostBuy(Request $request)
+    public function viewTransaction()
     {
-        $item = Item::with(['user', 'item_images', 'shippingDetail'])->where('id', $request->item_id)->first();
-        
-    }
+        if (Auth::check()) {
+            $userId = Auth::id();
+        } else {
+            return redirect()->route('login')->with('error', 'Please log in first.');
+        }
 
+        $trans = TransactionHeader::with(['transactionDetail.item' => function ($query) {
+            $query->withTrashed();
+        }, 'transactionDetail.item.item_images' => function ($query) {
+            $query->where('img_position', 1)
+                  ->orWhereNotIn('id', function ($subquery) {
+                      $subquery->select('id')
+                               ->from('item_images')
+                               ->where('img_position', 1);
+                  })
+                  ->orderBy('img_position', 'asc')
+                  ->orderBy('created_at', 'asc');
+        }
+        ])->where('user_id', $userId)->orderBy('created_at', 'desc')->get();
+
+        return view('transaction', compact('trans'));
+    }
 }

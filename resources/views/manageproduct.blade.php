@@ -11,7 +11,11 @@
             <div class="item-info">
                 <div class="pname">{{$item->name}}</div>
                 <div class="price">Rp {{$item->price}} /day</div>
+                @if ($item->stock <= 1)
+                <div class="stock">{{$item->stock}} pc</div>
+                @else
                 <div class="stock">{{$item->stock}} pcs</div>
+                @endif
             </div>
 
             <div class="item-actions">

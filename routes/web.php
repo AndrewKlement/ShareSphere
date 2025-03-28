@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\ReturnController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\ShippingDetailController;
 
@@ -31,6 +32,9 @@ Route::middleware("auth")->group(function (){
     Route::delete('/cart/delete/{id}', [CartController::class, 'delete'])->name('cart.delete');
     Route::patch('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 
+    //transaction
+    Route::get('/transaction', [TransactionController::class, 'viewTransaction'])->name('transaction');
+
     //shipping-detail
     Route::get('/shipping-detail', [ShippingDetailController::class, "shippingDetail"])->name("shippingDetail");
     Route::post('/shipping-detail', [ShippingDetailController::class, "shippingDetailPost"])->name("shippingDetail.post");
@@ -38,7 +42,7 @@ Route::middleware("auth")->group(function (){
     //view-product
     Route::get('/view/{id}', [ItemController::class, "viewProduct"])->name("viewProduct");
     Route::post('/product/cart', [CartController::class, 'viewProductPostCart'])->name('viewProduct.cart');
-    Route::post('/product/buy', [TransactionController::class, 'viewProductPostBuy'])->name('viewProduct.buy');
+    Route::post('/product/buy', [CartController::class, 'viewProductPostBuy'])->name('viewProduct.buy');
 
     //add-product
     Route::get('/add-product', [ItemController::class, "addProduct"])->name("addProduct");
@@ -54,9 +58,7 @@ Route::middleware("auth")->group(function (){
 
     //return
     Route::view('/return', 'return')->name("return");
-
-    //transaction
-    Route::view('/transaction', 'transaction')->name("transaction");
+    Route::get('/return-due', [ReturnController::class, "viewDue"])->name("returnDue");
 });
 
 

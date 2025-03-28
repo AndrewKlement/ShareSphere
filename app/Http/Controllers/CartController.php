@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\CartDetail;
+use App\Models\TransactionHeader;
+use App\Models\TransactionDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 
 class CartController extends Controller{
@@ -47,36 +50,27 @@ class CartController extends Controller{
 
         $request->validate([
             "quantity" => "required",
+            "duration" => "required",
         ]);
 
         $item = Item::where('id', $request->item_id)->first();
 
-        $cart_detail = CartDetail::where('user_id', $userId)
-        ->where('item_id', $item->id)
-        ->first();
+        $totStock = CartDetail::where('user_id', auth()->id())->where('item_id', $request->item_id)->sum('quantity');
 
-        if ($cart_detail) {
-            $newQuantity = $cart_detail->quantity + $request->quantity;
-    
-            if ($newQuantity > $item->stock) {
-                return redirect()->back()->with("error", "Failed to add because item out off stock");
-            }
+        $newTotalQuantity = $totStock + $request->quantity; 
 
-            $cart_detail->quantity = $newQuantity;
-            $cart_detail->total_price = $newQuantity * $item->price;
-        } else {
-            if ($request->quantity > $item->stock) {
+        if ($newTotalQuantity > $item->stock) {
                 return redirect()->back()->with("error", "Failed to add because item out off stock");
-            }
-    
-            $cart_detail = new CartDetail();
-            $cart_detail->fill([
-                'user_id' => $userId,
-                'item_id' => $request->item_id,
-                'quantity' => $request->quantity,
-                'total_price' => $request->quantity * $item->price
-            ]);
         }
+
+        $cart_detail = new CartDetail();
+        $cart_detail->fill([
+            'user_id' => $userId,
+            'item_id' => $request->item_id,
+            'quantity' => $request->quantity,
+            'duration' => $request->duration,
+            'total_price' => $request->quantity * $item->price *$request->duration
+        ]);
         
         if(!$cart_detail->save()){
             return redirect()->back()->with("error", "Failed to add item");
@@ -110,7 +104,71 @@ class CartController extends Controller{
     }
 
     public function processPayment(Request $request) {
+        if (Auth::check()) {
+            $userId = Auth::id();
+        } else {
+            return redirect()->route('login')->with('error', 'Please log in first.');
+        }
+
+        $selectedItems = collect(json_decode($request->selected_items, true))
+        ->map(fn($id) => (int) $id)
+        ->toArray();
+
+        $carts = CartDetail::whereIn('id', $selectedItems)->get();
         
+        if (!empty($selectedItems)) {
+            DB::beginTransaction();
+    
+            try {
+                $transHead = new TransactionHeader();
+                $transHead->user_id = $userId;
+    
+                if(!$transHead->save()){
+                    throw new \Exception("Payment failed");
+                }
+    
+                $saveHeadId = $transHead->id;
+                
+                foreach($carts as $cart){
+                    $transD = new TransactionDetail();
+                    $transD->fill([
+                        'transaction_header_id' => $saveHeadId,
+                        'item_id' => $cart->item_id,
+                        'quantity' => $cart->quantity,
+                        'quantity_return' => 0,
+                        'duration' => $cart->duration,
+                        'total_price' => $cart->total_price,
+                    ]);
+
+                    $item = Item::findOrFail($cart->item_id);
+                    $item->stock = $item->stock - $cart->quantity;
+                    $item->save();
+
+                    if(!$transD->save()){
+                        throw new \Exception("Payment failed");
+                    }
+                }
+    
+                if(!CartDetail::whereIn('id', $selectedItems)->delete()){
+                    throw new \Exception("Payment failed");
+                }
+                
+                DB::commit();
+    
+                return redirect(route("transaction"))
+                    ->with("success", "Payment successfull");
+                
+            } catch (\Exepction $th) {
+                DB::rollBack();
+    
+                return redirect(route("cart"))
+                ->with("error", $e->getMessage());
+            }
+        }
+        else{
+            return redirect(route("cart"))
+                ->with("error", "Payment failed");
+        }
     }
     
     public function delete($id) {
@@ -122,23 +180,58 @@ class CartController extends Controller{
         $cart = CartDetail::findOrFail($id);
         $item = Item::where('id', $cart->item_id)->first();
 
-        if ($request->quantity <= $item->stock) {
-            $cart->quantity = $request->quantity;
-            $cart->total_price = $request->quantity * $item->price;
-    
-            $cart->save();
-    
-            return response()->json([
-                'success' => true,
-                'newPrice' => $cart->total_price,
-                'newTotal' => CartDetail::where('user_id', auth()->id())->sum('total_price')
-            ]);
-        }else{
-            return response()->json([
-                'success' => false,
-                'newPrice' => $cart->total_price,
-                'newTotal' => CartDetail::where('user_id', auth()->id())->sum('total_price')
-            ]);
+        if ($request->has('quantity')) { 
+            $totStock = CartDetail::where('user_id', auth()->id())->where('item_id', $cart->item_id)->sum('quantity');
+            $newTotalQuantity = $totStock - $cart->quantity + $request->quantity; 
+
+            if ($newTotalQuantity <= $item->stock) {
+                $cart->quantity = $request->quantity;
+                $cart->total_price = $request->quantity * $item->price * ($cart->duration ?? 1);
+        
+                $cart->save();
+        
+                return response()->json([
+                    'success' => true,
+                    'newPrice' => $cart->total_price,
+                    'newTotal' => CartDetail::where('user_id', auth()->id())->sum('total_price')
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Quantity exceeds stock.',
+                    'newPrice' => $cart->total_price,
+                    'newTotal' => CartDetail::where('user_id', auth()->id())->sum('total_price')
+                ]);
+            }
         }
+
+        if ($request->has('duration')) { 
+            if ($request->duration > 0) {
+                $cart->duration = $request->duration;
+                $cart->total_price = $cart->quantity * $item->price * $request->duration;
+        
+                $cart->save();
+        
+                return response()->json([
+                    'success' => true,
+                    'newPrice' => $cart->total_price,
+                    'newTotal' => CartDetail::where('user_id', auth()->id())->sum('total_price')
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Duration must be greater than 0.',
+                    'newPrice' => $cart->total_price,
+                    'newTotal' => CartDetail::where('user_id', auth()->id())->sum('total_price')
+                ]);
+            }
+        }
+    
+        return response()->json([
+            'success' => false,
+            'message' => 'No valid fields to update.',
+            'newPrice' => $cart->total_price,
+            'newTotal' => CartDetail::where('user_id', auth()->id())->sum('total_price')
+        ]);
     }
 }

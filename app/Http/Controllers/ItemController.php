@@ -58,47 +58,61 @@ class ItemController extends Controller
             return back()->withErrors(['inputimage' => 'At least one image is required.'])->withInput();
         }
 
+        DB::beginTransaction();
 
-        $item = new Item();
-        $item->fill([
-            'name' => $request->pname,
-            'category_id' => $request->selectCategory,
-            'description' => $request->desc,
-            'price' => $request->price,
-            'stock' => $request->stock,
-            'user_id' => $userId
-        ]);
-        
-        if(!$item->save()){
-            return redirect(route("addProduct"))
-            ->with("error", "Failed to create item");
-        }
+        try {
+            // Create item
+            $item = new Item();
+            $item->fill([
+                'name' => $request->pname,
+                'category_id' => $request->selectCategory,
+                'description' => $request->desc,
+                'price' => $request->price,
+                'stock' => $request->stock,
+                'user_id' => $userId
+            ]);
 
-        $saveItemId = $item->id;
-        for ($i = 1; $i <= 5; $i++) {
-            if ($request->hasFile("inputimage$i") && $request->file("inputimage$i")->isValid()) {
-                $path = $request->file("inputimage$i")->store('images', 'public');
+            if (!$item->save()) {
+                throw new \Exception("Failed to create item");
+            }
 
-                $itemimage = new ItemImage;
-                $itemimage->item_id = $saveItemId;
-                $itemimage->path = $path;
-                $itemimage->img_position = $i;
-                
-                if(!$itemimage->save()){
-                    return redirect(route("addProduct"))
-                    ->with("error", "Failed to create item");
+            $saveItemId = $item->id;
+
+            // Loop through images and save them
+            for ($i = 1; $i <= 5; $i++) {
+                if ($request->hasFile("inputimage$i") && $request->file("inputimage$i")->isValid()) {
+                    $path = $request->file("inputimage$i")->store('images', 'public');
+
+                    $itemimage = new ItemImage();
+                    $itemimage->item_id = $saveItemId;
+                    $itemimage->path = $path;
+                    $itemimage->img_position = $i;
+
+                    if (!$itemimage->save()) {
+                        throw new \Exception("Failed to save item image");
+                    }
                 }
             }
-        }
 
-        return redirect(route("home"))->with("success", "Item Created");;
+            // Commit transaction if everything is successful
+            DB::commit();
+
+            return redirect(route("home"))
+                ->with("success", "Item created successfully");
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+
+            return redirect(route("addProduct"))
+            ->with("error", $e->getMessage());
+        }
     }
 
     // manage product
     public function manageProduct()
     {
         if (Auth::check()) {
-            $userId = Auth::id(); // Get authenticated user ID
+            $userId = Auth::id();
         } else {
             return redirect()->route('login')->with('error', 'Please log in first.');
         }
@@ -111,7 +125,6 @@ class ItemController extends Controller
                     });
                 })
                 ->orderBy('img_position', 'asc')
-                ->orderBy('created_at', 'asc')
                 ->limit(1);
         }])->where('user_id', $userId)->get();
         
@@ -121,7 +134,7 @@ class ItemController extends Controller
     public function manageProductDelete($itemId)
     {
         if (Auth::check()) {
-            $userId = Auth::id(); // Get authenticated user ID
+            $userId = Auth::id();
         } else {
             return redirect()->route('login')->with('error', 'Please log in first.');
         }
@@ -147,6 +160,7 @@ class ItemController extends Controller
     }
 
     public function editProductPatch(Request $request, $itemId){
+
         $request->validate([
             "pname" => "required",
             "selectCategory" => "required",
@@ -184,21 +198,16 @@ class ItemController extends Controller
             ->with("error", "Failed to edit item");
         }
 
-        $imagePos = [];
         for ($i = 1; $i <= 5; $i++) {
             if($request->filled("imageId$i")){
                 $item_image =  $item->item_images->firstWhere('img_position', $request->input("imageId$i"));;
-                
                 if ($item_image) {
                     Storage::disk('public')->delete($item_image->path);
                     $item_image->delete();
-                    
-                    $imagePos[] = $request->input("imageId$i");
                 }
             }
         }
 
-        $imageIDIDX = 0;
         for ($i = 1; $i <= 5; $i++) {
             if ($request->hasFile("inputimage$i") && $request->file("inputimage$i")->isValid()) {
                 $path = $request->file("inputimage$i")->store('images', 'public');
@@ -206,7 +215,7 @@ class ItemController extends Controller
                 $itemimage = new ItemImage;       
                 $itemimage->item_id = $itemId;
                 $itemimage->path = $path;
-                $itemimage->img_position = $imagePos[$imageIDIDX] ?? $i;
+                $itemimage->img_position = $i;
         
                 if (!$itemimage->save()) {
                     return redirect(route("editProduct", $itemId))->with("error", "Failed to create item");

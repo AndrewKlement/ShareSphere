@@ -12,6 +12,8 @@ class TransactionDetail extends Model
         'transaction_header_id',
         'item_id',
         'quantity',
+        'quantity_return',
+        'duration',
         'total_price',
     ];
 

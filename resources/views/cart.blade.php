@@ -36,10 +36,23 @@
                     </div>
 
                     @if(!$cart->item->trashed())
-                        <div class="quantity-input">
-                            <button type="button" class="btn btn-outline-secondary quantity-btn" data-id="{{ $cart->id }}" data-amount="-1">-</button>
-                            <div class="quantity" >{{ $cart->quantity }}</div>
-                            <button type="button" class="btn btn-outline-secondary quantity-btn" data-id="{{ $cart->id }}" data-amount="1">+</button>
+                        <div class="inpt-cont">
+                            Quantity
+                            <div class="quantity-input">
+                                <button type="button" class="btn btn-outline-secondary quantity-btn" data-id="{{ $cart->id }}" data-amount="-1">-</button>
+                                <div class="quantity" >{{ $cart->quantity }}</div>
+                                <button type="button" class="btn btn-outline-secondary quantity-btn" data-id="{{ $cart->id }}" data-amount="1">+</button>
+                            </div>
+                        </div>
+
+
+                        <div class="inpt-cont">
+                            Duration
+                            <div class="duration-input">
+                                <button type="button" class="btn btn-outline-secondary duration-btn" data-id="{{ $cart->id }}" data-amount="-1">-</button>
+                                <div class="duration" >{{ $cart->duration }}</div>
+                                <button type="button" class="btn btn-outline-secondary duration-btn" data-id="{{ $cart->id }}" data-amount="1">+</button>
+                            </div>
                         </div>
                     @endif
 

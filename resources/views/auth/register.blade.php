@@ -3,11 +3,6 @@
 @section("title", "Register")
 @section("content")
 
-@if (session()->has("error"))
-    <div class="alert alert-success">
-        {{session()->get( "error")}}  
-    </div>
-@endif
 
 <form class="form-cont" method="POST" action="{{route("register.post")}}">
     @csrf

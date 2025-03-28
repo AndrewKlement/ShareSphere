@@ -11,20 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transaction_headers', function (Blueprint $table) {
+        Schema::create('return_headers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->index()->constrained();
             $table->timestamps();
         });
         
-        Schema::create('transaction_details', function (Blueprint $table) {
+        Schema::create('return_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('transaction_header_id')->index()->constrained();
+            $table->foreignId('return_header_id')->index()->constrained();
             $table->foreignId('item_id')->index()->constrained();
             $table->integer('quantity');
-            $table->integer('quantity_return');
-            $table->integer('duration');
-            $table->integer('total_price');
             $table->timestamps();
         });
     }
@@ -34,7 +31,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transaction_details');
-        Schema::dropIfExists('transaction_headers');
+        Schema::dropIfExists('return_headers');
+        Schema::dropIfExists('return_details');
     }
 };

@@ -13,6 +13,8 @@ export default defineConfig({
                 'resources/js/productview.js',
                 'resources/js/cart.js',
                 'resources/js/cartcheckout.js',
+                'resources/js/transaction.js',
+                'resources/js/returndue.js',
                 'resources/js/addproduct.js',
                 'resources/js/manageproduct.js',
                 'resources/js/editproduct.js',

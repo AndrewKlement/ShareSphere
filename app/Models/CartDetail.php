@@ -14,6 +14,7 @@ class CartDetail extends Model
         'user_id',
         'item_id',
         'quantity',
+        'duration',
         'total_price',
     ];
 
