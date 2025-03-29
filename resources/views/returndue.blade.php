@@ -90,7 +90,7 @@
         @endif
     </div>
 
-    <form id="return-form" method="POST" action="{{route("cart.processPurchase")}}">
+    <form id="return-form" method="POST" action="{{route("return.request")}}">
         @csrf
         <div class="details">
             <div class="total-quantity">

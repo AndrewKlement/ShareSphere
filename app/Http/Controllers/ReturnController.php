@@ -43,4 +43,8 @@ class ReturnController extends Controller{
 
         return view('returndue', compact('trans'));
     }
+
+    public function requestReturn(){
+        
+    }
 }
