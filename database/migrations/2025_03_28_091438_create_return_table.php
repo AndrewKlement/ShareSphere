@@ -20,8 +20,10 @@ return new class extends Migration
         Schema::create('return_details', function (Blueprint $table) {
             $table->id();
             $table->foreignId('return_header_id')->index()->constrained();
+            $table->foreignId('transaction_detail_id')->index()->constrained();
             $table->foreignId('item_id')->index()->constrained();
             $table->integer('quantity');
+            $table->boolean('confirmed')->default(false);
             $table->timestamps();
         });
     }
@@ -31,7 +33,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('return_headers');
         Schema::dropIfExists('return_details');
+        Schema::dropIfExists('return_headers');
     }
 };

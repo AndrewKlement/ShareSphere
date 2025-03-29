@@ -10,7 +10,7 @@
 <div class="cont">
     <div class="list-cont">
         <div class="list-group">
-            <div class="label">On Time</div>
+            <div class="label">Upcoming</div>
             @foreach ($trans as $tran)
                 @foreach ($tran->transactionDetail as $td)
                     @php
@@ -77,7 +77,7 @@
                                     <div class="price">{{$td->quantity}} x Rp {{$td->item->price}} x {{$td->duration}} days</div>
                                     <div class="due">
                                         due on {{ $due_date->format('Y-m-d') }} 
-                                        ({{ $remaining_days == 0 ? 'today' : ($remaining_days == 1 ? '1 day' : $remaining_days . ' days') }})
+                                        (-{{ $remaining_days == 0 ? 'today' : ($remaining_days == 1 ? '1 day' : $remaining_days . ' days') }})
                                     </div>
                                 </div>
                                 <div class="total">Total: Rp {{$td->total_price}}</div>

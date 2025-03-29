@@ -59,6 +59,7 @@ Route::middleware("auth")->group(function (){
     //return
     Route::get('/return-due', [ReturnController::class, "viewDue"])->name("returnDue");
     Route::post('/return-due/request', [ReturnController::class, "requestReturn"])->name("return.request");
+    Route::post('/return-due/process', [ReturnController::class, "processReturn"])->name("return.process");
 });
 
 

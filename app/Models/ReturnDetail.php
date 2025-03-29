@@ -10,8 +10,14 @@ class ReturnDetail extends Model
 {
     protected $fillable = [
         'return_header_id',
+        'transaction_detail_id',
         'item_id',
         'quantity',
+        'confirmed',
+    ];
+
+    protected $casts = [
+        'confirmed' => 'boolean',
     ];
 
     public function returnHeader()
