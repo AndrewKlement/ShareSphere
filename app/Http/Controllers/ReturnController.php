@@ -23,6 +23,9 @@ class ReturnController extends Controller{
         }
 
         $trans = TransactionHeader::with([
+            'transactionDetail' => function ($query) {
+                $query->whereColumn('quantity_return', '<', 'quantity');
+            },
             'transactionDetail.item' => function ($query) {
                 $query->withTrashed();
             },
@@ -37,15 +40,71 @@ class ReturnController extends Controller{
                       ->orderBy('created_at', 'asc');
             }
         ])
-        ->where('user_id', $userId)
-        ->whereHas('transactionDetail', function ($query) {
-            $query->whereColumn('quantity_return', '<', 'quantity');
-        })
         ->orderBy('created_at', 'desc')
+        ->where('user_id', $userId)
         ->get();
 
         return view('returndue', compact('trans'));
     }
+
+    public function viewReturn(){
+        if (Auth::check()) {
+            $userId = Auth::id();
+        } else {
+            return redirect()->route('login')->with('error', 'Please log in first.');
+        }
+
+        $returns = ReturnHeader::with([
+            'returnDetail.item' => function ($query) {
+                $query->withTrashed();
+            },
+            'returnDetail.item.item_images' => function ($query) {
+                $query->where('img_position', 1)
+                      ->orWhereNotIn('id', function ($subquery) {
+                          $subquery->select('id')
+                                   ->from('item_images')
+                                   ->where('img_position', 1);
+                      })
+                      ->orderBy('img_position', 'asc')
+                      ->orderBy('created_at', 'asc');
+            }
+        ])
+        ->orderBy('created_at', 'desc')
+        ->where('user_id', $userId)
+        ->get();
+
+        return view('return', compact('returns'));
+    }
+
+    public function viewReturnRequest(){
+        if (Auth::check()) {
+            $userId = Auth::id();
+        } else {
+            return redirect()->route('login')->with('error', 'Please log in first.');
+        }
+
+        $returns = ReturnHeader::with([
+            'returnDetail.item' => function ($query) {
+                $query->withTrashed();
+            },
+            'returnDetail.item.item_images' => function ($query) {
+                $query->where('img_position', 1)
+                      ->orWhereNotIn('id', function ($subquery) {
+                          $subquery->select('id')
+                                   ->from('item_images')
+                                   ->where('img_position', 1);
+                      })
+                      ->orderBy('img_position', 'asc')
+                      ->orderBy('created_at', 'asc');
+            }
+        ])
+        ->orderBy('created_at', 'desc')
+        ->where('user_id', $userId)
+        ->get();
+
+        return view('returnrequest', compact('returns'));
+    }
+
 
     public function requestReturn(Request $request){
         if (!$request->filled('selected_items') || empty($request->selected_items)) {
@@ -72,7 +131,7 @@ class ReturnController extends Controller{
         ->whereIn('id', $selectedItems)
         ->get();
 
-        return view('return', compact('trans'));
+        return view('returnprocess', compact('trans'));
     }
 
     public function processReturn(Request $request){
@@ -137,4 +196,6 @@ class ReturnController extends Controller{
                 ->with("error", "Return failed");
         }
     }
+
+
 }

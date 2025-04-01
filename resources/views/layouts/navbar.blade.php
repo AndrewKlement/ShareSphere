@@ -27,7 +27,8 @@
               <li><a class="dropdown-item" href="/manage-product" id="manage-button">Manage Product</a></li>
               <li><a class="dropdown-item" href="/transaction" id="transaction-button">Transaction</a></li>
               <li><a class="dropdown-item" href="/return-due" id="return-button">Return Due</a></li>
-              <li><a class="dropdown-item" href="#" id="return-button">Return</a></li>
+              <li><a class="dropdown-item" href="/return-request" id="return-button">Return Request</a></li>
+              <li><a class="dropdown-item" href="/return" id="return-button">Return</a></li>
 
 
               <form id="logout-form" action="{{route('logout')}}" method="POST" style="display: none;">

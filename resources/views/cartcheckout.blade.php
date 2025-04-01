@@ -1,5 +1,5 @@
 @extends("layouts.app")
-@vite(['resources/js/cartcheckout.js'])
+@vite(['resources/js/checkout.js'])
 @section("title", "Cart")
 @section("content")
 

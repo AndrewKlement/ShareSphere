@@ -57,6 +57,8 @@ Route::middleware("auth")->group(function (){
     Route::patch('/edit-product/{id}', [ItemController::class, "editProductPatch"])->name("editProduct.patch");
 
     //return
+    Route::get('/return', [ReturnController::class, "viewReturn"])->name("return");
+    Route::get('/return-request', [ReturnController::class, "viewReturnRequest"])->name("returnRequest");
     Route::get('/return-due', [ReturnController::class, "viewDue"])->name("returnDue");
     Route::post('/return-due/request', [ReturnController::class, "requestReturn"])->name("return.request");
     Route::post('/return-due/process', [ReturnController::class, "processReturn"])->name("return.process");

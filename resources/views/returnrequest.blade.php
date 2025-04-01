@@ -1,5 +1,5 @@
 @extends("layouts.app")
-@section("title", "Return")
+@section("title", "Return Request")
 @vite(['resources/js/return.js'])
 @section("content")
     <div class="list-group">
