@@ -10,6 +10,7 @@ use App\Models\ReturnHeader;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 
 class ReturnController extends Controller{
@@ -83,11 +84,11 @@ class ReturnController extends Controller{
             return redirect()->route('login')->with('error', 'Please log in first.');
         }
 
-        $returns = ReturnHeader::with([
-            'returnDetail.item' => function ($query) {
+        $returns = ReturnDetail::with([
+            'item' => function ($query) {
                 $query->withTrashed();
             },
-            'returnDetail.item.item_images' => function ($query) {
+            'item.item_images' => function ($query) {
                 $query->where('img_position', 1)
                       ->orWhereNotIn('id', function ($subquery) {
                           $subquery->select('id')
@@ -98,13 +99,59 @@ class ReturnController extends Controller{
                       ->orderBy('created_at', 'asc');
             }
         ])
+        ->whereHas('item', function ($query) use ($userId) {
+            $query->withTrashed()->where('user_id', $userId);
+        })
+        ->where('confirmed', false)
         ->orderBy('created_at', 'desc')
-        ->where('user_id', $userId)
         ->get();
 
         return view('returnrequest', compact('returns'));
     }
 
+    public function confirmReturnRequest(Request $request, $id)
+    {
+        Log::info("Confirm Return Request ID: $id", ['request' => $request->all()]);
+    
+        $returnRequest = ReturnDetail::find($id);
+    
+        if (!$returnRequest) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Request not found'
+            ], 404);
+        }
+
+        DB::beginTransaction();
+    
+        try {
+
+            DB::commit();
+            $returnRequest->confirmed = true;
+                       
+            if(!$returnRequest->save()){
+                throw new \Exception("Confirm failed");
+            }
+
+            $item = Item::find($returnRequest->item_id);
+            $item->stock = $item->stock + $returnRequest->quantity;
+
+            if(!$item->save()){
+                throw new \Exception("Confirm failed");
+            }    
+
+        } catch (\Exepction $th) {
+            DB::rollBack();
+
+            return redirect(route("returnRequest"))
+            ->with("error", $e->getMessage());
+        }
+
+    
+        return response()->json([
+            'success' => true
+        ]);
+    }
 
     public function requestReturn(Request $request){
         if (!$request->filled('selected_items') || empty($request->selected_items)) {

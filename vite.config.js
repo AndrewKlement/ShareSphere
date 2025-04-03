@@ -16,6 +16,7 @@ export default defineConfig({
                 'resources/js/transaction.js',
                 'resources/js/return.js',
                 'resources/js/returndue.js',
+                'resources/js/returnrequest.js',
                 'resources/js/addproduct.js',
                 'resources/js/manageproduct.js',
                 'resources/js/editproduct.js',
