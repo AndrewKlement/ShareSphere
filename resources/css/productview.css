@@ -1,0 +1,64 @@
+.content{
+    display: flex;
+    padding: 35px;
+    max-width: 100%;
+    flex-wrap: wrap;
+    overflow-x: hidden;
+}
+
+.carousel{
+    width: 350px;
+    height: 350px;
+    justify-self: center;
+}
+
+img{
+    object-fit: cover; 
+    width: 350px;
+    height: 350px;
+    border-radius: 10px;
+}
+
+.item{
+    flex: 1;
+    min-width: 300px;
+    padding: 25px;
+}
+
+.item-name{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.item-price{
+    font-size: 25px;
+    font-weight: 645;
+}
+
+.item-desc {
+    font-size: 18px;
+    font-weight: 497;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    margin-bottom: 20px;
+}
+
+form{
+    margin: 0px;
+}
+
+.btn{
+    margin: 8px;
+}
+
+.quantity-btn, .duration-btn{
+    border: 0px;
+    color: black;
+}
+
+.quantity-btn:hover, .duration-btn:hover{
+    background-color: transparent;
+    color: black;
+}
+
+

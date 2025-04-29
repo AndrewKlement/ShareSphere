@@ -1,0 +1,11 @@
+.form-cont{
+    padding: 30px;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
+.btn{
+    border-color: rgb(192 192 192) !important;
+    background-color: rgb(192 192 192) !important;
+    color: black;
+}
