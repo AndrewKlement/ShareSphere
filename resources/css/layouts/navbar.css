@@ -15,13 +15,15 @@ textarea:focus{
 }
 
 .nav-cont{
-    background-color: rgb(190, 190, 190) !important;
+    background-color: white !important;
 }
 
-.search-cont{
+.search-cont {
     background-color: rgb(255, 255, 255) !important;
+    border: 1px solid #ccc; /* light gray border */
     border-radius: 6px;
     margin-bottom: 0px;
+    width: 100%;
 }
 
 .search{
@@ -35,23 +37,91 @@ textarea:focus{
     filter: invert(90%);
 }
 
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;      
+}
+
+.logo-icon {
+    height: 45px;  
+    width: 152.92px;    
+    margin-right: 8px; 
+    vertical-align: middle;
+}
+
 .text{
     padding-left: 12px;
     margin-right: 16px;
 }
 
-.dropdown-menu{
-    margin-top: 6px !important;
+.nav-item.text {
+    padding-left: 0px;
 }
 
-.dropdown-item:hover{
-    box-shadow: none;
-    background-color: white;
+.nav-item.profile {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+
+.profile-name{
+    color: black;
+}
+
+.profile-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.icon{
+  width: 25px;
+  height: 25px;
+}
+
+.nav-item.profile {
+  position: relative;
+}
+
+.dmprofile {
+  top: 100%;
+  right: 0px;
+}
+
+.dropdown-menu.menu {
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-item.profile:hover .dropdown-menu {
+  display: block;
+}
+.nav-item.product:hover .dropdown-menu {
+  display: block;
+}
+.nav-item.return:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-item {
+  padding: 10px 15px;
+  display: block;
+  text-decoration: none;
+  color: #333;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
 }
 
 @media only screen and (max-width: 993px) {
-    .search-cont{
-        background-color: transparent !important;
+    .search-cont {
+        width: 100% !important;
+        flex-direction: row !important;
         margin-top: 16px;
         margin-bottom: 8px;
     }
@@ -66,5 +136,14 @@ textarea:focus{
     .dropdown-item:hover{
         box-shadow: none;
         background-color: rgb(192 192 192);
+    }
+
+    .navbar-nav{
+        flex-direction: column !important;
+        align-items: start !important;
+    }
+
+    .devider{
+        display: none;
     }
 }

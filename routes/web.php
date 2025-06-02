@@ -21,6 +21,8 @@ Route::post('/register', [AuthController::class, "registerPost"])->name("registe
 Route::middleware("auth")->group(function (){  
     //home
     Route::get('/', [IndexController::class, "index"])->name("home");
+    Route::get('/search', [IndexController::class, "indexSearch"])->name('homeSearch');
+
     
     //logout
     Route::post('/logout', [AuthController::class, "logout"])->name("logout");

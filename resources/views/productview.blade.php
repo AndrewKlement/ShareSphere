@@ -29,7 +29,7 @@
     <div class="item">
         <p class="item-name">{{$item->name}}</p>
         <p class="item-price">Rp{{$item->price}} /day</p>
-        <div class="item-desc">{{$item->description}}feqwfeqwfqwefqwefwqefqwefqwefqwfwefwqqqqqqqqqqqqqqqqqq</div>
+        <div class="item-desc">{{$item->description}}</div>
         <p class="item-shipping">Shipped from {{$item->shippingDetail->province}} jakarta, by {{$item->user->name}}</p>
         
         <div class="form">
