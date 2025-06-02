@@ -56,14 +56,7 @@
                 <button type="submit" class="btn btn-success mt-2">Add to Cart</button>
             </form>
         
-            <form method="POST" action="{{ route('viewProduct.buy') }}">
-                @csrf
-                <input type="hidden" name="item_id" value="{{ $item->id }}">
-                <input type="hidden" name="quantity" id="buy-quantity" value="1">
-                <input type="hidden" name="quantity" id="buy-duration" value="1">
-        
-                <button type="submit" class="btn btn-primary mt-2">Buy Now</button>
-            </form>
+
         </div>
     </div>
 </div>

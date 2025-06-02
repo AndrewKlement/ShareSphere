@@ -30,15 +30,20 @@
     
                             <a href="{{ route('viewProduct', ['id' => $td->item->id]) }}" class="item-info text-decoration-none text-dark">
                                 <img src="/storage/{{$td->item->item_images->first()->path}}" class="item-image">
-                                <div class="pname">{{$td->item->name}}</div>
-                                <div class="desc-cont">
-                                    <div class="price">{{$td->quantity}} x Rp {{$td->item->price}} x {{$td->duration}} days</div>
-                                    <div class="due">
-                                        due on {{ $due_date->format('Y-m-d') }} 
-                                        ({{ $remaining_days == 0 ? 'today' : ($remaining_days == 1 ? '1 day' : $remaining_days . ' days') }})
+                                
+                                <div class="text-body">
+                                    <div class="pname">{{$td->item->name}}</div>
+                                    <div class="row-info">
+                                        <div class="desc-cont">
+                                            <div class="price">{{$td->quantity}} x Rp {{$td->item->price}} x {{$td->duration}} days</div>
+                                            <div class="due">
+                                                due on {{ $due_date->format('Y-m-d') }} 
+                                                ({{ $remaining_days == 0 ? 'today' : ($remaining_days == 1 ? '1 day' : $remaining_days . ' days') }})
+                                            </div>
+                                        </div>
+                                        <div class="total">Total: Rp {{$td->total_price}}</div>
                                     </div>
                                 </div>
-                                <div class="total">Total: Rp {{$td->total_price}}</div>
                             </a>
                         </li>
                     @else

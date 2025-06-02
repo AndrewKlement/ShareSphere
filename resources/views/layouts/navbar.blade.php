@@ -1,8 +1,11 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary nav-cont sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center" href="/">
-        <img class="logo-icon me-2" src="{{ asset('images/logo.svg') }}" alt="Logo" style=>
-    </a>
+<a class="navbar-brand d-flex align-items-center" href="/">
+    <img class="logo-icon me-2" 
+         src="{{ asset('images/logo.svg') }}" 
+         alt="Logo" 
+         style="width: 161; height: auto; max-height: 60px; object-fit: contain;">
+</a>
     <button class="navbar-toggler navbar-icon" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>

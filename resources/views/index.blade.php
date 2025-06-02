@@ -4,7 +4,7 @@
 @section("content")
 
 <div class="items-cont">
-  @if($items->isEmpty())
+  @if($items->isEmpty() && request('query'))
     <p class="text-center mt-4">No items found for "{{ request('query') }}"</p>
   @else
     @foreach ($items as $item)

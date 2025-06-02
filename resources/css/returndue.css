@@ -71,3 +71,30 @@
     flex-wrap: nowrap;
     border: 0px;
 }
+
+.text-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+}
+
+.row-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.desc-cont {
+    flex: 1;
+    overflow: hidden;
+}
+
+.total {
+    white-space: nowrap;
+    text-align: end;
+    min-width: fit-content;
+}
